@@ -1,0 +1,4 @@
+{
+	"Key"[String]: "Value",
+	"Key"[bool]: true,
+}

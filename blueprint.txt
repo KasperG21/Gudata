@@ -1,0 +1,11 @@
+name: type
+{
+	field: type = val,
+	field: type = val,
+}
+
+"George": Npc
+{
+	name: String = "GEORGE",
+	age: usize = 30,
+}

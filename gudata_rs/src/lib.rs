@@ -3,5 +3,5 @@ mod tests {
 
 }
 
-mod decode;
-mod encode;
+mod deserialize;
+mod serialize;

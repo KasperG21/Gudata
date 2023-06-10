@@ -1,4 +1,5 @@
+Mike: Person
 {
-	"Key"[String]: "Value",
-	"Key"[bool]: true,
+	"Key": String = "Value",
+	"Key": bool = true,
 }

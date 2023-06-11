@@ -2,4 +2,6 @@ Mike: Person
 {
 	"Key": String = "Value",
 	"Key": bool = true,
-}
+};
+
+Mike: Person{"Key": String = "Value","Key":bool = true,};

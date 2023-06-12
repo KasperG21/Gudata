@@ -47,5 +47,7 @@ fn read_vars<T>(var: String) -> T
 where
     String: FromGudata<T>
 {
-    var.deserialize() 
+    let temp: T = var.deserialize();
+
+    temp
 }

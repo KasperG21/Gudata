@@ -1,5 +1,9 @@
 use std::{path::Path, fs};
 
+use self::deser::FromGudata;
+
+mod deser;
+
 fn read_file(p: &Path) -> String
 {
     let raw_string = fs::read_to_string(p)
@@ -37,4 +41,11 @@ fn split_vars(raw_data: String) -> Vec<String>
     }
 
     vars
+}
+
+fn read_vars<T>(var: String) -> T
+where
+    String: FromGudata<T>
+{
+    var.deserialize() 
 }

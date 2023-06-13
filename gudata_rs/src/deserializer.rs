@@ -1,6 +1,6 @@
 use std::{path::Path, fs};
 
-use self::deser::FromGudata;
+pub use self::deser::FromGudata;
 
 mod deser;
 
@@ -12,7 +12,7 @@ pub fn read_file(p: &Path) -> String
     let mut trimmed_string = String::from("");
     for c in raw_string.chars()
     {
-        if c != '\n' && c != '\r' && c != '\t' && c != ' '  // checking if the character is a newline, space or tab and
+        if c != '\n' && c != '\r' && c != '\t'              // checking if the character is a newline, space or tab and
                                                             // if so removing it
         {
             trimmed_string.push(c); 
@@ -30,19 +30,20 @@ pub fn split_vars(raw_data: String) -> Vec<String>
 
     for ch in raw_data.chars()
     {
-        if ch == ':'
+        if ch == '='
         {
             should_note = true;
         }
         else if ch == ';'
         {
-            vars.push(temp);
+            let t = temp.trim().to_string();
+            vars.push(t);
             temp = String::new();
             should_note = false;
         }
         else if should_note
         {
-            temp.push(ch)
+            temp.push(ch);
         }
     }
 

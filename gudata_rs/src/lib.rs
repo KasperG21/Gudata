@@ -6,25 +6,81 @@ mod tests
     use crate::deserializer;
 
     #[test]
-    fn test_1()
+    fn test_2()
     {
-        let file_data = deserializer::read_file(&Path::new("tests/test_1.gudata"));
-        let var_arr = deserializer::split_vars(file_data);
+        let f_d = deserializer::read_file(&Path::new("tests/test_2.gudata"));
+        let v_arr = deserializer::split_vars(f_d);
 
-        let mut arr:Vec<char> = vec![];
-        for var in var_arr
+        let mut a = vec![];
+        for v in v_arr
         {
-            let v: char = deserializer::read_vars(var);
-            arr.push(v);
+            let t: Person = deserializer::read_vars(v);
+            a.push(t);
         }
 
-        let a0 = arr[0];
-        let a1 = arr[1];
+        let a0 = &a[0];
 
-        assert_eq!(a0, 'a');
-        assert_eq!(a1, '\'');
+        assert_eq!(a0.name, String::from("Mike"));
+        assert_eq!(a0.age, 52);
+    }
+
+    struct Person
+    {
+        name: String,
+        age: i32,
+    }
+
+    impl deserializer::FromGudata<Person> for String
+    {
+        fn deserialize(&self) -> Person
+        {
+            let mut should_note = false;
+            let mut should_note_v2 = false;
+            let mut name = String::new();
+            let mut age_raw = String::new();
+            let mut working_var = 1;
+
+            for ch in self.chars()
+            {
+                if ch == ':' && !should_note
+                {
+                    should_note = true;
+                }
+                else if ch == ',' && should_note
+                {
+                    should_note = false;
+                    working_var += 1;
+                }
+                else if should_note
+                {
+                    if ch == '\"' && should_note_v2 == false
+                    {
+                        should_note_v2 = true;
+                    }
+                    else if ch == '\"' && should_note_v2
+                    {
+                        should_note_v2 = true;
+                    }
+                    else if should_note_v2
+                    {
+                        match working_var
+                        {
+                            1 => name.push(ch),
+                            2 => age_raw.push(ch),
+                            _ => {},
+                        }
+                    }
+                }
+            }
+
+            Person
+            {
+                name: name.trim().to_string(),
+                age: age_raw.trim().parse().expect("Value provided wasn't a number..."),
+            }
+        }
     }
 }
 
-mod deserializer;
-mod serializer;
+pub mod deserializer;
+pub mod serializer;

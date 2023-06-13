@@ -7,12 +7,18 @@ impl FromGudata<String> for String
 {
     fn deserialize(&self) -> String
     {
+        let mut should_read = false;
+
         let mut trimmed = String::new();
         for ch in self.chars()
         {
-            if ch != '\"'
+            if !should_read && ch == '\"'
             {
-                trimmed.push(ch); 
+                should_read = true;
+            }
+            else if should_read
+            {
+                trimmed.push(ch);
             }
         }
 

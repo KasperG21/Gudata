@@ -8,6 +8,7 @@ impl FromGudata<String> for String
     fn deserialize(&self) -> String
     {
         let mut should_read = false;
+        let mut count = 0;
 
         let mut trimmed = String::new();
         for ch in self.chars()
@@ -16,10 +17,15 @@ impl FromGudata<String> for String
             {
                 should_read = true;
             }
+            else if should_read && ch == '\"' && count == self.len()-1
+            {
+                should_read = false;
+            }
             else if should_read
             {
                 trimmed.push(ch);
             }
+            count += 1;
         }
 
         trimmed

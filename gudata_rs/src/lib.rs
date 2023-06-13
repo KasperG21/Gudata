@@ -3,7 +3,16 @@ mod tests
 {
     use std::path::Path;
 
-    use crate::deserializer;
+    use crate::{deserializer::{self, FromGudata}, serializer};
+
+    #[test]
+    fn test_1()
+    {
+        let vars = deserializer::read_file(&Path::new("tests/test_1.gudata"));
+        let var_arr = deserializer::split_vars(vars);
+
+        let arr: Vec<String> = var_arr.into_iter().map(| var: String | var.deserialize()).collect();
+    }
 
     #[test]
     fn test_2()
@@ -14,7 +23,7 @@ mod tests
         let mut a = vec![];
         for v in v_arr
         {
-            let t: Person = deserializer::read_vars(v);
+            let t: Person = v.deserialize();
             a.push(t);
         }
 

@@ -1,8 +1,9 @@
 use std::{path::Path, fs, io::Write};
 
 mod ser;
+pub use ser::ToGudata;
 
-fn write_file(p: &Path, buf: &str)
+pub fn write_file(p: &Path, buf: &str)
 {
     let mut file = fs::OpenOptions
         ::new()
